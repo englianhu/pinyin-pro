@@ -1,5 +1,5 @@
-const { pinyin } = require('../');
-const expect = require('chai').expect;
+import { pinyin } from '../lib/index';
+import { expect, describe, it } from 'vitest';
 
 describe('v', () => {
   it('[v]no v', () => {
@@ -20,5 +20,10 @@ describe('v', () => {
   it('[v]v', () => {
     const result4 = pinyin('吕布', { v: true });
     expect(result4).to.be.equal('lǚ bù');
+  });
+
+  it('[v]nonZh', () => {
+    const result4 = pinyin('吕布ü', { toneType: 'none', v: true });
+    expect(result4).to.be.equal('lv bu ü');
   });
 });

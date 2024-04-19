@@ -1,7 +1,14 @@
-const { pinyin, customPinyin, clearCustomDict, polyphonic } = require('../');
-const expect = require('chai').expect;
+import { pinyin, addDict, customPinyin, clearCustomDict, polyphonic } from '../lib/index';
+import { expect, describe, it } from 'vitest';
+
+const completeDict = require("@pinyin-pro/data/complete.json");
+
+addDict(completeDict);
 
 function clearAllCustomDicts() {
+  clearCustomDict('pinyin');
+  clearCustomDict('multiple');
+  clearCustomDict('polyphonic');
   clearCustomDict(['pinyin', 'multiple', 'polyphonic']);
 }
 
@@ -181,6 +188,19 @@ describe('custom for polyphonic', () => {
     });
     const result = polyphonic('好好学习');
     expect(result).to.deep.equal(['hǎo hào kao', 'hǎo hào kao', 'xué', 'xí']);
+    clearAllCustomDicts();
+  });
+});
+
+describe('custom abnormal', () => {
+  it('[custom]custom abnormal1', () => {
+    customPinyin({
+      你好: 'nihao'
+    },  {
+      multiple: 'add',
+    });
+    const result = pinyin('你好好学习');
+    expect(result).to.be.equal('nihao  hǎo xué xí');
     clearAllCustomDicts();
   });
 });
